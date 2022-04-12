@@ -10,11 +10,13 @@ import android.util.Log;
 
 public class Rest {
 
-    private static HttpURLConnection 	httpCon = null;
-    private static URL 					url;
+    private static HttpURLConnection httpCon = null;
+    private static URL url;
 
-    private static final String hostURL = "http://192.168.1.73:8080";
-
+    final String yourIP = "YOUR_IP_NETWORK_ADDRESS"; // Ví dụ: mình kết nối thiết bị với wifi ở nhà, lấy địa chỉ IPV4
+                                                     // của wifi Ex: http://192.xxx.xxx.xxx.xxx;
+    final static String port = ":8080";
+    private static final String hostURL = yourIp + port;
 
     public static void setup(String request) {
         try {
@@ -22,13 +24,11 @@ public class Rest {
             httpCon = (HttpURLConnection) url.openConnection();
             httpCon.setUseCaches(false);
             httpCon.setReadTimeout(15 * 1000); // 15 seconds to timeout
-            httpCon.setRequestProperty( "Content-Type", "application/json" );
+            httpCon.setRequestProperty("Content-Type", "application/json");
             httpCon.setRequestProperty("Accept", "application/json");
 
-        }
-        catch (Exception e)
-        {
-            Log.v("donate","REST SETUP ERROR" + e.getMessage());
+        } catch (Exception e) {
+            Log.v("donate", "REST SETUP ERROR" + e.getMessage());
         }
     }
 
@@ -40,13 +40,13 @@ public class Rest {
 
         try {
             setup(url);
-            Log.v("Step 1","Done");
+            Log.v("Step 1", "Done");
             httpCon.setRequestMethod("GET");
-            Log.v("Step 2","Done");
+            Log.v("Step 2", "Done");
             httpCon.setDoInput(true);
-            Log.v("Step 3","Done");
+            Log.v("Step 3", "Done");
             httpCon.connect();
-            Log.v("Step 4","Done");
+            Log.v("Step 4", "Done");
 
             Log.v("donate", "GET REQUEST is : " + httpCon.getRequestMethod() + " " + httpCon.getURL());
 
@@ -63,7 +63,7 @@ public class Rest {
         }
 
         catch (Exception e) {
-            Log.v("donate","GET REQUEST ERROR" + e.getMessage());
+            Log.v("donate", "GET REQUEST ERROR" + e.getMessage());
         }
 
         return stringBuilder.toString();
@@ -86,7 +86,7 @@ public class Rest {
         }
 
         catch (Exception e) {
-            Log.v("donate","DELETE REQUEST ERROR" + e.getMessage());
+            Log.v("donate", "DELETE REQUEST ERROR" + e.getMessage());
         }
 
         return response;
@@ -95,24 +95,26 @@ public class Rest {
     // /////////////////////////////////////////////////////////////////////////////////////////////
     public static String put(String url, String json) {
         String result = "";
-		/*try {
-			String strRequest = getBase() + url;
-			HttpPut putRequest = new HttpPut(strRequest);
-			putRequest.setHeader("Content-type", "application/json");
-			putRequest.setHeader("accept", "application/json");
-			//putRequest.setHeader("accept","text/plain");
-			StringEntity s = new StringEntity(json);
-			//s.setContentEncoding("UTF-8");
-			s.setContentType("application/json");
-
-			putRequest.setEntity(s);
-
-			HttpResponse response = httpClient.execute(putRequest);
-			result = getResult(response).toString();
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}*/
+        /*
+         * try {
+         * String strRequest = getBase() + url;
+         * HttpPut putRequest = new HttpPut(strRequest);
+         * putRequest.setHeader("Content-type", "application/json");
+         * putRequest.setHeader("accept", "application/json");
+         * //putRequest.setHeader("accept","text/plain");
+         * StringEntity s = new StringEntity(json);
+         * //s.setContentEncoding("UTF-8");
+         * s.setContentType("application/json");
+         * 
+         * putRequest.setEntity(s);
+         * 
+         * HttpResponse response = httpClient.execute(putRequest);
+         * result = getResult(response).toString();
+         * 
+         * } catch (Exception e) {
+         * System.out.println(e.getMessage());
+         * }
+         */
         return result;
     }
 
@@ -137,7 +139,7 @@ public class Rest {
 
             stringBuilder = new StringBuilder();
             int HttpResult = httpCon.getResponseCode();
-            if(HttpResult == HttpURLConnection.HTTP_OK) {
+            if (HttpResult == HttpURLConnection.HTTP_OK) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(httpCon.getInputStream(), "utf-8"));
                 String line = null;
                 while ((line = br.readLine()) != null)
@@ -148,7 +150,7 @@ public class Rest {
         }
 
         catch (Exception e) {
-            Log.v("donate","POST REQUEST ERROR" + e.getMessage());
+            Log.v("donate", "POST REQUEST ERROR" + e.getMessage());
         }
 
         return stringBuilder.toString();
