@@ -1,7 +1,7 @@
 <!-- ABOUT THE PROJECT -->
 # Donation-5.0-uet
-My class's Pratical Exercise 
-Final version, client java language, server nodejs
+* My class's Pratical Exercise 
+* Final version, client java language, server nodejs
 
 # How to run
 ## Server side:
