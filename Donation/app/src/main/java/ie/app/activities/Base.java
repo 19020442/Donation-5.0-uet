@@ -73,7 +73,6 @@ public class Base extends AppCompatActivity
         MenuItem donate = menu.findItem(R.id.menuDonate);
         MenuItem reset = menu.findItem(R.id.menuReset);
             new GetAllTask(this).execute("/donations");
-
         if(app.donations.size() == 0)
         {
             report.setEnabled(false);
@@ -138,7 +137,6 @@ public class Base extends AppCompatActivity
         protected List<Donation> doInBackground(String... params) {
 
             try {
-
                 return (List<Donation>) DonationApi.getAll((String) params[0]);
             } catch (Exception e) {
                 Log.v("ASYNC", "ERROR : " + e);

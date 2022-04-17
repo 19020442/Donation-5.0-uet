@@ -23,6 +23,8 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.List;
+
 import ie.app.R;
 import ie.app.api.DonationApi;
 import ie.app.models.Donation;
@@ -55,32 +57,18 @@ public class Donate extends Base{
         amountPicker = (NumberPicker) findViewById(R.id.amountPicker);
         amountText = (EditText) findViewById(R.id.paymentAmount);
         amountTotal = (TextView) findViewById(R.id.totalSoFar);
-
-
+//        int allAmount = 0;
+//        List<Donation> data = DonationApi.getAll((String) "/donations");
+//        for (int i = 0 ; i < data.size() ; i ++) {
+//            allAmount += data.get(i).amount;
+//        }
         amountPicker.setMinValue(0);
         amountPicker.setMaxValue(1000);
         progressBar.setMax(10000);
-        amountTotal.setText("Total so far $0");
+        amountTotal.setText("Total so far $"+ app.totalDonated);
+        progressBar.setProgress(app.totalDonated);
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_donate, menu);
-//        return true;
-//    }
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item)
-//    {
-//        switch (item.getItemId())
-//        {
-//            case R.id.menuReport : startActivity (new Intent(this, Report.class));
-//                break;
-//            case R.id.menuDonate : startActivity (new Intent(this, Donate.class));
-//                break;
-//
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+
     public void donateButtonPressed (View view)
     {
         String method = paymentMethod.getCheckedRadioButtonId() ==
@@ -100,6 +88,7 @@ public class Donate extends Base{
             amountTotal.setText(totalDonatedStr);
             new InsertTask(this).execute("/donations");
         }
+
 
     }
 
@@ -186,8 +175,11 @@ public class Donate extends Base{
         protected String doInBackground(Object... params) {
             String method = paymentMethod.getCheckedRadioButtonId() ==
                     R.id.paypal ? "PayPal" : "Direct";
+            if (amountPicker.getValue() == 0) {
+
+            }
             DonationApi.insert(params[0].toString(),new Donation(
-                    app.totalDonated,method, 0) );
+                    amountPicker.getValue() == 0 ?Integer.parseInt(amountText.getText().toString()) : amountPicker.getValue(),method, 0) );
             String res = null;
             try {
                 Log.v("donate", "Donation App Inserting");

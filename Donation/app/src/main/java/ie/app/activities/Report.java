@@ -197,10 +197,14 @@ public class Report extends Base implements AdapterView.OnItemClickListener, Vie
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground (String... params) {
 
             try {
+//                    Log.v("DETAILS", params[0] + params[1]);
+              Donation a = DonationApi.get(params[0], params[1]).get(0);
+              app.totalDonated -= a.amount;
                 return (String) DonationApi.delete((String) params[0], (String) params[1]);
+
             } catch (Exception e) {
                 Log.v("donate", "ERROR : " + e);
                 e.printStackTrace();
@@ -212,8 +216,8 @@ public class Report extends Base implements AdapterView.OnItemClickListener, Vie
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            String s = result;
-            Log.v("donate", "DELETE REQUEST : " + s);
+
+            Log.v("donate", "DELETE REQUEST: " + result);
 
             new GetAllTask(Report.this).execute("/donations");
 
